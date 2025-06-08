@@ -3,6 +3,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain.docstore.document import Document
+import config
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -12,24 +13,22 @@ class RAGChunker:
 
     def __init__(
         self,
-        chunk_size = 500,
-        chunk_overlap  = 50,
-        use_semantic_chunking = True,
-        embedding_model = "sentence-transformers/all-MiniLM-L6-v2",
+        chunk_size: int = 500,
+        chunk_overlap: int = 50,
+        use_semantic_chunking: bool = True,
+        embeddings: Optional[HuggingFaceEmbeddings] = None,
     ):
 
         self.chunk_size = chunk_size
         self.chunk_overlap  = chunk_overlap
         self.use_semantic_chunking = use_semantic_chunking
-        self.embedding_model = embedding_model
 
         if self.use_semantic_chunking:
             try:
-                self.embeddings = HuggingFaceEmbeddings(model_name=self.embedding_model)
                 self.text_splitter = SemanticChunker(
                     breakpoint_threshold_type = "percentile",
                     breakpoint_threshold_amount = 95,
-                    embeddings = self.embeddings,
+                    embeddings = embeddings if embeddings else HuggingFaceEmbeddings(model_name = config.EMBEDDING_MODEL),
                 )
             except:
                 print("Please install sentence_transformers package to use semantic chunking")

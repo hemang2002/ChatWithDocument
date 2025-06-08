@@ -1,8 +1,10 @@
 from typing import Optional, List, Dict
+import config
 from langchain_community.vectorstores import FAISS
 from langchain.docstore.document import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from chunking import RAGChunker
+import config
 import os
 
 
@@ -10,10 +12,12 @@ class FAISSVectorStore:
     def __init__(
         self,
         index_path: str,
-        embeddings_model: str = "sentence-transformers/all-MiniLM-L6-v2",
-        chunk_size: int = 500,
-        chunk_overlap: int = 200,
-        use_semantic_chunking: bool = True,
+        embeddings_model: str = config.EMBEDDING_MODEL,
+        chunk_size: int = config.CHUNK_SIZE,
+        chunk_overlap: int = config.CHUNK_OVERLAP,
+        use_semantic_chunking: bool = None,
+        embeddings: Optional[HuggingFaceEmbeddings] = None,
+        chunker: Optional[RAGChunker] = None,
         ):
         """
         Initialize the FAISS vector store.
@@ -27,17 +31,18 @@ class FAISSVectorStore:
         """
 
         self.index_path = index_path
-        self.use_semantic_chunking = use_semantic_chunking
+        self.use_semantic_chunking = use_semantic_chunking if use_semantic_chunking else config.USER_SEMENTIC_CHUNKING
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
 
         try:
-            self.embeddings = HuggingFaceEmbeddings(model_name = embeddings_model)
+            self.embeddings = embeddings if embeddings else HuggingFaceEmbeddings(model_name = config.EMBEDDING_MODEL)
             self.chunker = RAGChunker(
-                chunk_size=self.chunk_size,
-                chunk_overlap=self.chunk_overlap,
-                use_semantic_chunking=self.use_semantic_chunking
-            )
+                chunk_size = chunk_size,
+                chunk_overlap = chunk_overlap,
+                use_semantic_chunking = self.use_semantic_chunking,
+                embeddings = self.embeddings
+            ) if chunker is None else chunker
             self.vector_store = self.load_index()
 
         except Exception as e:
@@ -75,7 +80,7 @@ class FAISSVectorStore:
 
             if self.use_semantic_chunking:
                 documents = [
-                    Document(page_content=text, metadata=metadata)
+                    Document(page_content = text, metadata = metadata)
                     for text, metadata in zip(texts, metadatas)
                 ]
                 chunks = self.chunker.chunk_documents(documents)
@@ -127,15 +132,13 @@ class FAISSVectorStore:
             doc_ids (List[str]): IDs of documents to delete.
         """
         try:
-            all_docs = self.vector_store.similarity_search("", k=1000)  # Returns all docs (empty query)
+            all_docs = self.vector_store.similarity_search("", k = 1000)  
             
-            # Step 2: Filter out documents whose doc_id is in the delete list
             remaining_docs = [
                 doc for doc in all_docs
                 if doc.metadata.get("doc_id") not in doc_ids
             ]
 
-            # Step 3: Reset and rebuild index from remaining docs
             self.vector_store = FAISS.from_documents(remaining_docs, self.embeddings)
             self._save_index()
             print(f"Deleted documents with IDs: {doc_ids}")
@@ -168,9 +171,9 @@ def main():
         # Initialize vector store
         vector_store = FAISSVectorStore(
             index_path=r"C:\Users\Hemang\Desktop\Hemang\Project\Master\Master\GIT_clones\Understanding-of-RAG--updating-and-filtering-data\data\faiss_index",
-            chunk_size=500,
-            chunk_overlap=100,
-            use_semantic_chunking=True
+            chunk_size = 500,
+            chunk_overlap = 100,
+            use_semantic_chunking = True
         )
         
         # Sample documents
@@ -187,7 +190,7 @@ def main():
         vector_store.add_documents(sample_texts, sample_metadatas)
         print(1)
         # Search
-        results = vector_store.search("What is machine learning?", k=2)
+        results = vector_store.search("What is machine learning?", k = 2)
         for i, doc in enumerate(results):
             print(f"\nResult {i + 1}:")
             print(f"Content: {doc.page_content[:100]}...")
