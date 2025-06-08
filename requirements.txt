@@ -1,0 +1,10 @@
+faiss-cpu
+sentence-transformers
+streamlit
+transformers
+torch
+python-dotenv
+langchain
+langchain-text-splitters
+langchain_huggingface
+numpy
