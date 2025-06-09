@@ -9,12 +9,11 @@ import os
 
 
 class FAISSVectorStore:
+
+
     def __init__(
         self,
         index_path: str,
-        embeddings_model: str = config.EMBEDDING_MODEL,
-        chunk_size: int = config.CHUNK_SIZE,
-        chunk_overlap: int = config.CHUNK_OVERLAP,
         use_semantic_chunking: bool = None,
         embeddings: Optional[HuggingFaceEmbeddings] = None,
         chunker: Optional[RAGChunker] = None,
@@ -32,14 +31,12 @@ class FAISSVectorStore:
 
         self.index_path = index_path
         self.use_semantic_chunking = use_semantic_chunking if use_semantic_chunking else config.USER_SEMENTIC_CHUNKING
-        self.chunk_size = chunk_size
-        self.chunk_overlap = chunk_overlap
 
         try:
             self.embeddings = embeddings if embeddings else HuggingFaceEmbeddings(model_name = config.EMBEDDING_MODEL)
             self.chunker = RAGChunker(
-                chunk_size = chunk_size,
-                chunk_overlap = chunk_overlap,
+                chunk_size = config.CHUNK_SIZE,
+                chunk_overlap = config.CHUNK_OVERLAP,
                 use_semantic_chunking = self.use_semantic_chunking,
                 embeddings = self.embeddings
             ) if chunker is None else chunker
@@ -171,8 +168,6 @@ def main():
         # Initialize vector store
         vector_store = FAISSVectorStore(
             index_path=r"C:\Users\Hemang\Desktop\Hemang\Project\Master\Master\GIT_clones\Understanding-of-RAG--updating-and-filtering-data\data\faiss_index",
-            chunk_size = 500,
-            chunk_overlap = 100,
             use_semantic_chunking = True
         )
         

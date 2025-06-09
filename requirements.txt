@@ -5,6 +5,8 @@ transformers
 torch
 python-dotenv
 langchain
+langchain_groq
 langchain-text-splitters
 langchain_huggingface
 numpy
+tavily-python
