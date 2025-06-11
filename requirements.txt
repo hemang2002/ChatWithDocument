@@ -10,3 +10,4 @@ langchain-text-splitters
 langchain_huggingface
 numpy
 tavily-python
+flask
