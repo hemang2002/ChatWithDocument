@@ -11,3 +11,12 @@ langchain_huggingface
 numpy
 tavily-python
 flask
+redis
+pyjwt
+python-docx
+PyPDF2
+celery
+flask_limiter
+flask_wtf
+bleach
+psycopg2

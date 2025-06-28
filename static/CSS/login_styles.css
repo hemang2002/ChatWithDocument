@@ -1,0 +1,113 @@
+:root {
+    --primary-color: #87CEEB;
+}
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: #ffffff;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Inter", sans-serif;
+}
+.login-container {
+    background-color: #f9fbfd;
+}
+.login-btn {
+    background: linear-gradient(135deg, var(--primary-color), #98ff98);
+    transition: all 0.3s ease;
+}
+.login-btn:hover {
+    background: linear-gradient(135deg, #79b9d3, #7de47d);
+    transform: translateY(-2px);
+}
+.input-field {
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+.input-field:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(135, 206, 235, 0.2);
+}
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+body.dark-mode .login-container {
+    background-color: #1e1e1e;
+}
+body.dark-mode .input-field {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border-color: #4d4d4d;
+}
+body.dark-mode .text-gray-500 {
+    color: #a0a0a0 !important;
+}
+body.dark-mode .text-gray-600 {
+    color: #c2c2c2 !important;
+}
+body.dark-mode .text-gray-800 {
+    color: #ffffff !important;
+}
+body.dark-mode .bg-gray-100 {
+    background-color: #2d2d2d !important;
+}
+body.dark-mode .border-gray-100 {
+    border-color: #3d3d3d !important;
+}
+
+/* Dark mode styles for phone-otp-modal */
+body.dark-mode #phone-otp-modal {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+body.dark-mode #phone-otp-modal .bg-white {
+    background-color: #2d2d2d;
+}
+body.dark-mode #phone-otp-modal .text-gray-500 {
+    color: #a0a0a0;
+}
+body.dark-mode #phone-otp-modal .text-gray-900 {
+    color: #ffffff;
+}
+body.dark-mode #email-otp-modal {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+body.dark-mode #email-otp-modal .bg-white {
+    background-color: #2d2d2d;
+}
+body.dark-mode #email-otp-modal .text-gray-500 {
+    color: #a0a0a0;
+}
+body.dark-mode #email-otp-modal .text-gray-900 {
+    color: #ffffff;
+}
+body.dark-mode #email-otp-modal .input-field {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border-color: #4d4d4d;
+}
+body.dark-mode #email-otp-modal .input-field:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(135, 206, 235, 0.2);
+}
+body.dark-mode #email-otp-modal .login-btn {
+    background: linear-gradient(135deg, var(--primary-color), #98ff98);
+}
+body.dark-mode #email-otp-modal .login-btn:hover {
+    background: linear-gradient(135deg, #79b9d3, #7de47d);
+}
